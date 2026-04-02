@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Project{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'core/styles.css' %}">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="{% url 'dashboard' %}" class="logo">
+                 <img src="{% static 'core/aic4nl-logo.png' %}" alt="Logo">
+            </a>
+
+            <div class="nav-links">
+                <a href="{% url 'dashboard' %}">Dashboard</a>
+                <a href="{% url 'community' %}">Community</a>
+                <a href="{% url 'zoeken' %}">Zoeken</a>
+            </div>
+        </div>
+
+        <div class="nav-right">
+            <button class="new-post-btn" onclick="openModal()">Nieuwe post</button>
+            <a href="{% url 'profiel' %}" class="profile-icon" aria-label="Profiel">👤</a>
+        </div>
+    </nav>
+
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="postModal">
+        <div class="modal">
+            <h2>Nieuwe post</h2>
+            <p>Under construction</p>
+
+            <textarea placeholder="Schrijf hier je post..."></textarea>
+
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closeModal()">Sluiten</button>
+                <button class="btn-primary">Posten</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openModal() {
+            document.getElementById('postModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('postModal').style.display = 'none';
+        }
+
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('postModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+    </script>
+
+</body>
+</html>
