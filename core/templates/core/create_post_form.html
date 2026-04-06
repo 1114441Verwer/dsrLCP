@@ -1,0 +1,47 @@
+<form method="post" action="{% url 'create_post' %}" class="prototype-post-form">
+    {% csrf_token %}
+
+    <div class="modal-title-row">
+        <h2>Nieuwe bijdrage plaatsen</h2>
+    </div>
+
+    <div class="form-section">
+        <label class="field-label" for="{{ form.title.id_for_label }}">Titel <span>*</span></label>
+        {{ form.title }}
+    </div>
+
+    <div class="form-section">
+        <label class="field-label" for="{{ form.type.id_for_label }}">Type bijdrage</label>
+        {{ form.type }}
+    </div>
+
+    <div class="form-section">
+        <label class="field-label" for="{{ form.image_path.id_for_label }}">Afbeelding (optioneel)</label>
+        {{ form.image_path }}
+    </div>
+
+    <div class="form-section">
+        <label class="field-label" for="{{ form.short_description.id_for_label }}">Korte omschrijving <span>*</span></label>
+        {{ form.short_description }}
+    </div>
+
+    <div class="form-section">
+        <label class="field-label" for="{{ form.long_description.id_for_label }}">Uitgebreide omschrijving</label>
+        {{ form.long_description }}
+    </div>
+
+    <div class="form-section">
+        <label class="field-label" for="{{ form.category.id_for_label }}">Categorie <span>*</span></label>
+        {{ form.category }}
+    </div>
+
+    <div class="form-section">
+        <label class="field-label" for="{{ form.target_audience.id_for_label }}">Doelgroep</label>
+        {{ form.target_audience }}
+    </div>
+
+    <div class="modal-actions">
+        <button type="button" class="btn-cancel" onclick="closePostModal()">Annuleren</button>
+        <button type="submit" class="btn-submit">Plaatsen</button>
+    </div>
+</form>

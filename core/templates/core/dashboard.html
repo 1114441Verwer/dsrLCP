@@ -2,13 +2,27 @@
 
 {% block content %}
 <div class="dashboard-hero">
-    <h1>Welkom terug, "{{ user }}" 👋</h1>
-    <p>Ontdek nieuwe inzichten, deel kennis en groei samen met de CARAI-community.</p>
+    <h1>Welkom terug, "{{ user }}" </h1>
+    <p>Ontdek nieuwe inzichten, deel kennis en groei samen met de community.</p>
 </div>
 
 <div class="card">
     <h2>Vandaag</h2>
-    <p>Je hebt 3 nieuwe berichten in de community, 2 taken open en 5 nieuwe connecties.</p>
+    <p>Bekijk de nieuwste bijdragen van de community.</p>
 </div>
 
+<div class="card">
+    <h2>Recente posts</h2>
+
+    {% for post in recent_posts %}
+        <div class="recent-post-item">
+            <h3>{{ post.title }}</h3>
+            <p><strong>Type bijdrage:</strong> {{ post.type }}</p>
+            <p>{{ post.short_description }}</p>
+            <a href="{% url 'community' %}">Bekijk in community</a>
+        </div>
+    {% empty %}
+        <p>Er zijn nog geen recente posts.</p>
+    {% endfor %}
+</div>
 {% endblock %}

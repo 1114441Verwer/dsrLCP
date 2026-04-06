@@ -3,6 +3,44 @@
 {% block title %}Community{% endblock %}
 
 {% block content %}
-<h1>Community</h1>
-<p>Deze pagina is nog leeg.</p>
+<div class="community-layout">
+    <div class="community-main">
+        <div class="community-composer">
+            <div class="composer-avatar">TS</div>
+            <div class="composer-input">Deel je kennis of stel een vraag...</div>
+            <button class="composer-post-btn" onclick="openPostModal()">Post</button>
+        </div>
+
+        {% for post in posts %}
+            <div class="community-post-card">
+                <div class="community-post-header">
+                    <div class="post-user-avatar">
+                        {{ post.user.username|slice:":1"|upper }}
+                    </div>
+                    <div>
+                        <div class="post-user-line">
+                            <strong>{{ post.user.username }}</strong>
+                        </div>
+                        <div class="post-date">{{ post.created_at|timesince }} geleden</div>
+                    </div>
+                </div>
+
+                <h3 class="community-post-title">{{ post.title }}</h3>
+                <p class="community-post-text">{{ post.short_description }}</p>
+                <span class="community-tag">{{ post.category }}</span>
+            </div>
+        {% empty %}
+            <div class="community-post-card">
+                <p>Er zijn nog geen posts geplaatst.</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="community-sidebar">
+        <div class="sidebar-box">
+            <h3>Community stats</h3>
+            <p>Totaal posts: {{ posts|length }}</p>
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Nieuwe bijdrage plaatsen{% endblock %}
+
+{% block content %}
+<div class="post-page-wrapper">
+    <div class="post-form-card">
+        <div class="post-form-header">
+            <h1>Nieuwe bijdrage plaatsen</h1>
+        </div>
+
+        <form method="post" class="post-form">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="{{ form.title.id_for_label }}">Titel</label>
+                {{ form.title }}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.type.id_for_label }}">Type bijdrage</label>
+                {{ form.type }}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.image_path.id_for_label }}">Afbeelding (optioneel)</label>
+                {{ form.image_path }}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.short_description.id_for_label }}">Korte omschrijving</label>
+                {{ form.short_description }}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.long_description.id_for_label }}">Uitgebreide omschrijving</label>
+                {{ form.long_description }}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.category.id_for_label }}">Categorie</label>
+                {{ form.category }}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.target_audience.id_for_label }}">Doelgroep</label>
+                {{ form.target_audience }}
+            </div>
+
+            <div class="post-form-actions">
+                <a href="{% url 'community' %}" class="btn-secondary">Annuleren</a>
+                <button type="submit" class="btn-primary">Plaatsen</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
