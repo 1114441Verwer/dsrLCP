@@ -22,13 +22,19 @@
         </div>
 
         <div class="nav-right">
-            <button class="new-post-btn" onclick="openPostModal()">Nieuwe post</button>
-            <a href="{% url 'profiel' %}" class="profile-icon" aria-label="Profiel">
-    <svg viewBox="0 0 24 24" fill="none">
-        <circle cx="12" cy="8" r="4" fill="white"/>
-        <path d="M4 20c0-4 4-6 8-6s8 2 8 6" fill="white"/>
-    </svg>
-</a>
+            {% if user.is_authenticated %}
+                <button class="new-post-btn" onclick="openPostModal()">Nieuwe post</button>
+                <a href="{% url 'profiel' %}" class="profile-icon" aria-label="Profiel">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="8" r="4" fill="white"/>
+                        <path d="M4 20c0-4 4-6 8-6s8 2 8 6" fill="white"/>
+                    </svg>
+                </a>
+                <a href="{% url 'logout' %}" class="logout-btn">Uitloggen</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="login-btn">Inloggen</a>
+                <a href="{% url 'register' %}" class="register-btn">Registreren</a>
+            {% endif %}
         </div>
     </nav>
 
