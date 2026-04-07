@@ -5,15 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Project{% endblock %}</title>
-
     <link rel="stylesheet" href="{% static 'core/styles.css' %}">
 </head>
 <body>
-
     <nav class="navbar">
         <div class="nav-left">
             <a href="{% url 'dashboard' %}" class="logo">
-                 <img src="{% static 'core/aic4nl-logo.png' %}" alt="Logo">
+                <img src="{% static 'core/aic4nl-logo.png' %}" alt="Logo">
             </a>
 
             <div class="nav-links">
@@ -24,8 +22,13 @@
         </div>
 
         <div class="nav-right">
-            <button class="new-post-btn" onclick="openModal()">Nieuwe post</button>
-            <a href="{% url 'profiel' %}" class="profile-icon" aria-label="Profiel">👤</a>
+            <button class="new-post-btn" onclick="openPostModal()">Nieuwe post</button>
+            <a href="{% url 'profiel' %}" class="profile-icon" aria-label="Profiel">
+    <svg viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="8" r="4" fill="white"/>
+        <path d="M4 20c0-4 4-6 8-6s8 2 8 6" fill="white"/>
+    </svg>
+</a>
         </div>
     </nav>
 
@@ -33,37 +36,30 @@
         {% block content %}{% endblock %}
     </div>
 
-    <!-- Modal -->
     <div class="modal-overlay" id="postModal">
-        <div class="modal">
-            <h2>Nieuwe post</h2>
-            <p>Under construction</p>
-
-            <textarea placeholder="Schrijf hier je post..."></textarea>
-
-            <div class="modal-actions">
-                <button class="btn-secondary" onclick="closeModal()">Sluiten</button>
-                <button class="btn-primary">Posten</button>
-            </div>
+        <div class="post-modal">
+            <button class="modal-close" onclick="closePostModal()">×</button>
+            {% include 'core/create_post_form.html' %}
         </div>
     </div>
 
     <script>
-        function openModal() {
+        function openPostModal() {
             document.getElementById('postModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
         }
 
-        function closeModal() {
+        function closePostModal() {
             document.getElementById('postModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
         }
 
         window.addEventListener('click', function(event) {
             const modal = document.getElementById('postModal');
             if (event.target === modal) {
-                closeModal();
+                closePostModal();
             }
         });
     </script>
-
 </body>
 </html>
