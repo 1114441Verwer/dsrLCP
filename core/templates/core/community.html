@@ -5,11 +5,18 @@
 {% block content %}
 <div class="community-layout">
     <div class="community-main">
-        <div class="community-composer">
-            <div class="composer-avatar">TS</div>
-            <div class="composer-input">Deel je kennis of stel een vraag...</div>
-            <button class="composer-post-btn" onclick="openPostModal()">Post</button>
-        </div>
+        {% if user.is_authenticated %}
+            <div class="community-composer">
+                <div class="composer-avatar">{{ user.username|slice:":1"|upper }}</div>
+                <div class="composer-input">Deel je kennis of stel een vraag...</div>
+                <button class="composer-post-btn" onclick="openPostModal()">Post</button>
+            </div>
+        {% else %}
+            <div class="community-composer">
+                <div class="composer-input">Log in om een post te plaatsen...</div>
+                <a href="{% url 'login' %}" class="composer-post-btn">Inloggen</a>
+            </div>
+        {% endif %}
 
         {% for post in posts %}
             <div class="community-post-card">

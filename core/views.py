@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
-from .models import Post, User
-from .forms import PostForm
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from .models import Post, User, Institution
+from .forms import PostForm, UserRegistrationForm
 
 
 def dashboard_view(request):
@@ -19,13 +21,15 @@ def community_view(request):
     })
 
 
+@login_required
 def create_post_view(request):
     if request.method == 'POST':
         form = PostForm(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
-            post.user = User.objects.first()  # tijdelijk
+            post.user = request.user
             post.save()
+            messages.success(request, 'Post succesvol aangemaakt!')
             return redirect('community')
     return redirect('community')
 
@@ -34,5 +38,18 @@ def zoeken_view(request):
     return render(request, 'core/zoeken.html')
 
 
+@login_required
 def profiel_view(request):
     return render(request, 'core/profiel.html')
+
+
+def register_view(request):
+    if request.method == 'POST':
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            messages.success(request, 'Account succesvol aangemaakt! Je kunt nu inloggen.')
+            return redirect('login')
+    else:
+        form = UserRegistrationForm()
+    return render(request, 'core/register.html', {'form': form})

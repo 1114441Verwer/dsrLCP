@@ -1,8 +1,76 @@
 {% extends 'core/base.html' %}
 
-{% block title %}Zoeken{% endblock %}
+{% block title %}Profiel{% endblock %}
 
 {% block content %}
-<h1>Profiel</h1>
-<p>Deze pagina is nog leeg.</p>
+<div class="profile-container">
+    <div class="profile-header">
+        <div class="profile-avatar">
+            {{ user.username|slice:":1"|upper }}
+        </div>
+        <div class="profile-info">
+            <h1>{{ user.get_full_name|default:user.username }}</h1>
+            <p class="profile-username">@{{ user.username }}</p>
+            {% if user.function %}
+                <p class="profile-function">{{ user.function }}</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="profile-details">
+        <div class="profile-section">
+            <h3>Persoonlijke informatie</h3>
+            <div class="profile-field">
+                <label>Email:</label>
+                <span>{{ user.email }}</span>
+            </div>
+            {% if user.date_of_birth %}
+                <div class="profile-field">
+                    <label>Geboortedatum:</label>
+                    <span>{{ user.date_of_birth|date:"d-m-Y" }}</span>
+                </div>
+            {% endif %}
+            {% if user.description %}
+                <div class="profile-field">
+                    <label>Beschrijving:</label>
+                    <span>{{ user.description }}</span>
+                </div>
+            {% endif %}
+            {% if user.ai_knowledge_level %}
+                <div class="profile-field">
+                    <label>AI kennisniveau:</label>
+                    <span>{{ user.ai_knowledge_level }}/10</span>
+                </div>
+            {% endif %}
+            {% if user.institution %}
+                <div class="profile-field">
+                    <label>Instelling:</label>
+                    <span>{{ user.institution.name }}</span>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="profile-section">
+            <h3>Statistieken</h3>
+            <div class="profile-field">
+                <label>Posts:</label>
+                <span>{{ user.posts.count }}</span>
+            </div>
+            <div class="profile-field">
+                <label>Reacties:</label>
+                <span>{{ user.comments.count }}</span>
+            </div>
+            <div class="profile-field">
+                <label>Punten:</label>
+                <span>{{ user.points }}</span>
+            </div>
+            {% if user.rank %}
+                <div class="profile-field">
+                    <label>Rank:</label>
+                    <span>{{ user.rank }}</span>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
 {% endblock %}
