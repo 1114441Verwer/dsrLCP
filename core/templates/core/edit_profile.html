@@ -14,93 +14,93 @@
             {% csrf_token %}
 
             <div class="form-group">
-                <label for="{{ form.username.id_for_label }}">Gebruikersnaam</label>
-                {{ form.username }}
-                {% if form.username.errors %}
+                <label for="{{ edit_form.username.id_for_label }}">Gebruikersnaam</label>
+                {{ edit_form.username }}
+                {% if edit_form.username.errors %}
                     <div class="error-message">
-                        {{ form.username.errors.0 }}
+                        {{ edit_form.username.errors.0 }}
                     </div>
                 {% endif %}
             </div>
 
             <div class="form-group">
-                <label for="{{ form.email.id_for_label }}">Email</label>
-                {{ form.email }}
-                {% if form.email.errors %}
+                <label for="{{ edit_form.email.id_for_label }}">Email</label>
+                {{ edit_form.email }}
+                {% if edit_form.email.errors %}
                     <div class="error-message">
-                        {{ form.email.errors.0 }}
+                        {{ edit_form.email.errors.0 }}
                     </div>
                 {% endif %}
             </div>
 
             <div class="form-row">
                 <div class="form-group">
-                    <label for="{{ form.first_name.id_for_label }}">Voornaam</label>
-                    {{ form.first_name }}
-                    {% if form.first_name.errors %}
+                    <label for="{{ edit_form.first_name.id_for_label }}">Voornaam</label>
+                    {{ edit_form.first_name }}
+                    {% if edit_form.first_name.errors %}
                         <div class="error-message">
-                            {{ form.first_name.errors.0 }}
+                            {{ edit_form.first_name.errors.0 }}
                         </div>
                     {% endif %}
                 </div>
 
                 <div class="form-group">
-                    <label for="{{ form.last_name.id_for_label }}">Achternaam</label>
-                    {{ form.last_name }}
-                    {% if form.last_name.errors %}
+                    <label for="{{ edit_form.last_name.id_for_label }}">Achternaam</label>
+                    {{ edit_form.last_name }}
+                    {% if edit_form.last_name.errors %}
                         <div class="error-message">
-                            {{ form.last_name.errors.0 }}
+                            {{ edit_form.last_name.errors.0 }}
                         </div>
                     {% endif %}
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="{{ form.date_of_birth.id_for_label }}">Geboortedatum</label>
-                {{ form.date_of_birth }}
-                {% if form.date_of_birth.errors %}
+                <label for="{{ edit_form.date_of_birth.id_for_label }}">Geboortedatum</label>
+                {{ edit_form.date_of_birth }}
+                {% if edit_form.date_of_birth.errors %}
                     <div class="error-message">
-                        {{ form.date_of_birth.errors.0 }}
+                        {{ edit_form.date_of_birth.errors.0 }}
                     </div>
                 {% endif %}
             </div>
 
             <div class="form-group">
-                <label for="{{ form.function.id_for_label }}">Functie</label>
-                {{ form.function }}
-                {% if form.function.errors %}
+                <label for="{{ edit_form.function.id_for_label }}">Functie</label>
+                {{ edit_form.function }}
+                {% if edit_form.function.errors %}
                     <div class="error-message">
-                        {{ form.function.errors.0 }}
+                        {{ edit_form.function.errors.0 }}
                     </div>
                 {% endif %}
             </div>
 
             <div class="form-group">
-                <label for="{{ form.description.id_for_label }}">Beschrijving</label>
-                {{ form.description }}
-                {% if form.description.errors %}
+                <label for="{{ edit_form.description.id_for_label }}">Beschrijving</label>
+                {{ edit_form.description }}
+                {% if edit_form.description.errors %}
                     <div class="error-message">
-                        {{ form.description.errors.0 }}
+                        {{ edit_form.description.errors.0 }}
                     </div>
                 {% endif %}
             </div>
 
             <div class="form-group">
-                <label for="{{ form.ai_knowledge_level.id_for_label }}">AI kennisniveau (1-10)</label>
-                {{ form.ai_knowledge_level }}
-                {% if form.ai_knowledge_level.errors %}
+                <label for="{{ edit_form.ai_knowledge_level.id_for_label }}">AI kennisniveau (1-10)</label>
+                {{ edit_form.ai_knowledge_level }}
+                {% if edit_form.ai_knowledge_level.errors %}
                     <div class="error-message">
-                        {{ form.ai_knowledge_level.errors.0 }}
+                        {{ edit_form.ai_knowledge_level.errors.0 }}
                     </div>
                 {% endif %}
             </div>
 
             <div class="form-group">
-                <label for="{{ form.institution.id_for_label }}">Instelling</label>
-                {{ form.institution }}
-                {% if form.institution.errors %}
+                <label for="{{ edit_form.institution.id_for_label }}">Instelling</label>
+                {{ edit_form.institution }}
+                {% if edit_form.institution.errors %}
                     <div class="error-message">
-                        {{ form.institution.errors.0 }}
+                        {{ edit_form.institution.errors.0 }}
                     </div>
                 {% endif %}
             </div>

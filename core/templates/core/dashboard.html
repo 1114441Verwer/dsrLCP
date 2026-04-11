@@ -19,11 +19,31 @@
     <h2>Recente posts</h2>
 
     {% for post in recent_posts %}
-        <div class="recent-post-item">
-            <h3>{{ post.title }}</h3>
-            <p><strong>Type bijdrage:</strong> {{ post.type }}</p>
-            <p>{{ post.short_description }}</p>
-            <a href="{% url 'community' %}">Bekijk in community</a>
+        <div class="recent-post-item" onclick="openPostDetail({{ post.id }}, '{{ post.title|escapejs }}', '{{ post.user.username|escapejs }}', '{{ post.user.function|escapejs }}', '{{ post.created_at|timesince }} geleden', '{{ post.type|escapejs }}', '{{ post.short_description|escapejs }}', '{{ post.long_description|escapejs }}', '{{ post.category|escapejs }}')" style="cursor: pointer;">
+            <div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px;">
+                <div class="post-user-avatar" style="width: 36px; height: 36px; font-size: 16px;">
+                    {{ post.user.username|slice:":1"|upper }}
+                </div>
+                <div style="flex: 1; min-width: 0;">
+                    <h3 style="margin: 0 0 4px 0; font-size: 18px; color: #111827;">{{ post.title }}</h3>
+                    <div style="color: #6b7280; font-size: 13px;">
+                        <span style="font-weight: 600; color: #111827;">{{ post.user.username }}</span>
+                        {% if post.user.function %}<span> • {{ post.user.function }}</span>{% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <p style="color: #4b5563; font-size: 14px; margin: 8px 0; line-height: 1.5;">{{ post.short_description }}</p>
+            
+            {% if post.category_list %}
+                <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px;">
+                    {% for cat in post.category_list %}
+                        <span class="community-tag" style="margin: 0; display: inline-block;">{{ cat }}</span>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <a href="{% url 'community' %}" onclick="event.stopPropagation();" style="color: #0d8b79; font-weight: 600; text-decoration: none; font-size: 13px;">Bekijk in community →</a>
         </div>
     {% empty %}
         <p>Er zijn nog geen recente posts.</p>
