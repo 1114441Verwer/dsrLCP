@@ -65,3 +65,12 @@ pip install django pillow
 - `.venv` wordt niet gedeeld via Git
 - Iedereen moet zelf een `.venv` maken
 - Activeer altijd eerst je `.venv` voordat je het project start
+
+
+🔄 Na het mergen / pullen
+
+Na het ophalen van nieuwe wijzigingen moet je je lokale database updaten:
+
+✅ Stappen
+git pull
+python manage.py migrate
