@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Post, User, Institution
-from .forms import PostForm, UserRegistrationForm
+from .forms import PostForm, UserRegistrationForm, UserEditForm
 
 
 def dashboard_view(request):
@@ -41,6 +41,19 @@ def zoeken_view(request):
 @login_required
 def profiel_view(request):
     return render(request, 'core/profiel.html')
+
+
+@login_required
+def edit_profile_view(request):
+    if request.method == 'POST':
+        form = UserEditForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Profiel succesvol bijgewerkt!')
+            return redirect('profiel')
+    else:
+        form = UserEditForm(instance=request.user)
+    return render(request, 'core/edit_profile.html', {'form': form})
 
 
 def register_view(request):

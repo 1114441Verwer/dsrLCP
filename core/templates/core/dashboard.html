@@ -2,7 +2,11 @@
 
 {% block content %}
 <div class="dashboard-hero">
-    <h1>Welkom terug, "{{ user }}" </h1>
+    {% if user.is_authenticated %}
+        <h1>Welkom terug, {{ user.username }}</h1>
+    {% else %}
+        <h1>Welkom bij LCP</h1>
+    {% endif %}
     <p>Ontdek nieuwe inzichten, deel kennis en groei samen met de community.</p>
 </div>
 
