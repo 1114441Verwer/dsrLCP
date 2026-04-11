@@ -4,6 +4,40 @@ from .models import Post, User, Institution
 
 
 class PostForm(forms.ModelForm):
+    TYPE_CHOICES = [
+        ('Vraag', 'Vraag'),
+        ('Ervaring delen', 'Ervaring delen'),
+        ('Innovatie / Tool', 'Innovatie / Tool'),
+        ('Artikel / Publicatie', 'Artikel / Publicatie'),
+        ('Discussie', 'Discussie'),
+    ]
+    
+    CATEGORY_CHOICES = [
+        ('AI & Technologie', 'AI & Technologie'),
+        ('Richtlijnen', 'Richtlijnen'),
+        ('Digitale Zorg', 'Digitale Zorg'),
+        ('Organisatie', 'Organisatie'),
+        ('Onderzoek', 'Onderzoek'),
+        ('Opleiding', 'Opleiding'),
+        ('Innovatie', 'Innovatie'),
+        ('Patiëntenzorg', 'Patiëntenzorg'),
+    ]
+    
+    TARGET_AUDIENCE_CHOICES = [
+        ('Huisartsen', 'Huisartsen'),
+        ('Verpleegkundigen', 'Verpleegkundigen'),
+        ('Zorgmanagement', 'Zorgmanagement'),
+        ('Onderzoekers', 'Onderzoekers'),
+        ('Medisch specialisten', 'Medisch specialisten'),
+        ('Paramedici', 'Paramedici'),
+        ('Zorg-ICT', 'Zorg-ICT'),
+        ('Alle zorgprofessionals', 'Alle zorgprofessionals'),
+    ]
+    
+    type = forms.ChoiceField(choices=TYPE_CHOICES, label='Type bijdrage', widget=forms.RadioSelect)
+    category = forms.MultipleChoiceField(choices=CATEGORY_CHOICES, label='Categorie', widget=forms.CheckboxSelectMultiple, required=False)
+    target_audience = forms.MultipleChoiceField(choices=TARGET_AUDIENCE_CHOICES, label='Doelgroep', widget=forms.CheckboxSelectMultiple, required=False)
+    
     class Meta:
         model = Post
         fields = [
@@ -14,6 +48,7 @@ class PostForm(forms.ModelForm):
             'long_description',
             'category',
             'target_audience',
+            'institution',
         ]
         labels = {
             'title': 'Titel',
@@ -23,15 +58,14 @@ class PostForm(forms.ModelForm):
             'long_description': 'Uitgebreide omschrijving',
             'category': 'Categorie',
             'target_audience': 'Doelgroep',
+            'institution': 'Organisatie',
         }
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
-            'type': forms.TextInput(attrs={'class': 'form-control'}),
             'image_path': forms.TextInput(attrs={'class': 'form-control'}),
             'short_description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'long_description': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
-            'category': forms.TextInput(attrs={'class': 'form-control'}),
-            'target_audience': forms.TextInput(attrs={'class': 'form-control'}),
+            'institution': forms.Select(attrs={'class': 'form-control'}),
         }
 
 

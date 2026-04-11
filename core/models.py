@@ -55,6 +55,43 @@ class User(AbstractUser):
         related_name="users"
     )
 
+    def get_level(self):
+        """Bereken het niveau gebaseerd op punten"""
+        if self.points >= 2000:
+            return 5
+        elif self.points >= 1000:
+            return 4
+        elif self.points >= 500:
+            return 3
+        elif self.points >= 200:
+            return 2
+        else:
+            return 1
+    
+    def get_level_progress(self):
+        """Bereken de voortgang naar het volgende niveau (0-100%)"""
+        level = self.get_level()
+        thresholds = {1: 200, 2: 500, 3: 1000, 4: 2000, 5: 2500}
+        
+        if level == 5:
+            # Voor level 5: voortgang naar 5000 punten
+            current_threshold = 2000
+            next_threshold = 5000
+        else:
+            current_threshold = thresholds.get(level - 1, 0)
+            next_threshold = thresholds[level]
+        
+        range_size = next_threshold - current_threshold
+        progress = self.points - current_threshold
+        percentage = int((progress / range_size) * 100) if range_size > 0 else 0
+        return min(percentage, 100)
+    
+    def get_points_for_next_level(self):
+        """Hoeveel punten nog nodig voor het volgende niveau"""
+        level = self.get_level()
+        thresholds = {1: 200, 2: 500, 3: 1000, 4: 2000, 5: 5000}
+        return max(0, thresholds.get(level + 1, 5000) - self.points)
+
     def __str__(self):
         return self.username
 

@@ -1,0 +1,27 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Post verwijderen{% endblock %}
+
+{% block content %}
+<div class="post-page-wrapper">
+    <div class="post-form-card" style="max-width: 600px; text-align: center;">
+        <h1 style="margin-bottom: 16px; font-size: 28px; color: #111827;">Post verwijderen</h1>
+        
+        <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
+            <p style="color: #991b1b; font-weight: 600; margin-bottom: 8px;">Weet je het zeker?</p>
+            <p style="color: #7f1d1d; margin: 0;">Je gaat de volgende post verwijderen:</p>
+            <h3 style="color: #111827; margin: 12px 0 0 0;">{{ post.title }}</h3>
+        </div>
+
+        <p style="color: #6b7280; margin-bottom: 24px;">Deze actie kan niet ongedaan gemaakt worden.</p>
+
+        <div style="display: flex; gap: 12px; justify-content: center;">
+            <a href="{% url 'community' %}" class="btn-cancel">Annuleren</a>
+            <form method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn-submit" style="background: #dc2626; box-shadow: 0 6px 14px rgba(220, 38, 38, 0.18);">Verwijderen</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
