@@ -52,6 +52,13 @@
         </div>
     </div>
 
+    <div class="modal-overlay" id="postDetailModal">
+        <div class="post-modal" style="max-width: 800px;">
+            <button class="modal-close" onclick="closePostDetail()">×</button>
+            <div id="postDetailContent"></div>
+        </div>
+    </div>
+
     <script>
         function openPostModal() {
             document.getElementById('postModal').style.display = 'flex';
@@ -63,10 +70,66 @@
             document.body.style.overflow = 'auto';
         }
 
+        function openPostDetail(id, title, username, userFunction, date, type, shortDesc, longDesc, categories) {
+            const categoriesList = categories.split(',').map(cat => `<span class="community-tag">${cat.trim()}</span>`).join('');
+            
+            const html = `
+                <div style="padding: 24px;">
+                    <div style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px;">
+                        <div class="post-user-avatar" style="width: 48px; height: 48px;">
+                            ${username.charAt(0).toUpperCase()}
+                        </div>
+                        <div style="flex: 1;">
+                            <h2 style="margin: 0 0 8px 0; font-size: 24px; color: #111827;">${title}</h2>
+                            <div style="display: flex; align-items: center; gap: 6px; color: #6b7280; font-size: 14px;">
+                                <span style="font-weight: 600; color: #111827;">${username}</span>
+                                ${userFunction ? `<span>• ${userFunction}</span>` : ''}
+                                <span>• ${date}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: inline-block; margin-bottom: 14px;">
+                        <span class="community-tag" style="background: #dbeafe; color: #0284c7;">${type}</span>
+                    </div>
+
+                    <h3 style="color: #4b5563; font-weight: 600; margin: 16px 0 8px 0; font-size: 14px;">Korte beschrijving</h3>
+                    <p style="color: #4b5563; font-size: 15px; line-height: 1.6; margin-bottom: 16px;">${shortDesc}</p>
+
+                    ${longDesc ? `
+                        <h3 style="color: #4b5563; font-weight: 600; margin: 16px 0 8px 0; font-size: 14px;">Uitgebreide beschrijving</h3>
+                        <p style="color: #4b5563; font-size: 15px; line-height: 1.6; margin-bottom: 16px;">${longDesc}</p>
+                    ` : ''}
+
+                    ${categories ? `
+                        <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #e5e7eb;">
+                            <h3 style="color: #4b5563; font-weight: 600; margin: 0 0 8px 0; font-size: 14px;">Categorieën</h3>
+                            <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                                ${categoriesList}
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+            
+            document.getElementById('postDetailContent').innerHTML = html;
+            document.getElementById('postDetailModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePostDetail() {
+            document.getElementById('postDetailModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
         window.addEventListener('click', function(event) {
-            const modal = document.getElementById('postModal');
-            if (event.target === modal) {
+            const postModal = document.getElementById('postModal');
+            const postDetailModal = document.getElementById('postDetailModal');
+            if (event.target === postModal) {
                 closePostModal();
+            }
+            if (event.target === postDetailModal) {
+                closePostDetail();
             }
         });
     </script>

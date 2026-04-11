@@ -19,22 +19,48 @@
         {% endif %}
 
         {% for post in posts %}
-            <div class="community-post-card">
-                <div class="community-post-header">
+            <div class="community-post-card" onclick="openPostDetail({{ post.id }}, '{{ post.title|escapejs }}', '{{ post.user.username|escapejs }}', '{{ post.user.function|escapejs }}', '{{ post.created_at|timesince }} geleden', '{{ post.type|escapejs }}', '{{ post.short_description|escapejs }}', '{{ post.long_description|escapejs }}', '{{ post.category|escapejs }}')" style="cursor: pointer;">
+                <div style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px;">
                     <div class="post-user-avatar">
                         {{ post.user.username|slice:":1"|upper }}
                     </div>
-                    <div>
-                        <div class="post-user-line">
-                            <strong>{{ post.user.username }}</strong>
+                    <div style="flex: 1;">
+                        <h3 class="community-post-title" style="margin: 0 0 8px 0;">{{ post.title }}</h3>
+                        <div style="display: flex; align-items: center; gap: 6px; color: #6b7280; font-size: 14px;">
+                            <span style="font-weight: 600; color: #111827;">{{ post.user.username }}</span>
+                            {% if post.user.function %}<span>• {{ post.user.function }}</span>{% endif %}
+                            <span>• {{ post.created_at|timesince }} geleden</span>
                         </div>
-                        <div class="post-date">{{ post.created_at|timesince }} geleden</div>
                     </div>
+                    {% if user.is_authenticated and user == post.user %}
+                        <div style="display: flex; gap: 6px;">
+                            <a href="{% url 'edit_post' post.id %}" style="color: #0d8b79; text-decoration: none; font-size: 13px; font-weight: 500; padding: 6px 12px; background: #dff5ef; border-radius: 6px;" onclick="event.stopPropagation();">Bewerken</a>
+                            <a href="{% url 'delete_post' post.id %}" style="color: #dc2626; text-decoration: none; font-size: 13px; font-weight: 500; padding: 6px 12px; background: #fef2f2; border-radius: 6px;" onclick="event.stopPropagation();">Verwijderen</a>
+                        </div>
+                    {% endif %}
                 </div>
 
-                <h3 class="community-post-title">{{ post.title }}</h3>
+                <div class="post-type-badge" style="display: inline-block; margin-bottom: 12px;">
+                    <span class="community-tag" style="background: #dbeafe; color: #0284c7;">{{ post.type }}</span>
+                </div>
+
                 <p class="community-post-text">{{ post.short_description }}</p>
-                <span class="community-tag">{{ post.category }}</span>
+
+                <div class="post-meta-info" style="border-top: none; padding-top: 0; margin-top: 12px;">
+                    {% if post.category_list %}
+                        <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                            {% for cat in post.category_list %}
+                                <span class="community-tag">{{ cat }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    {% if post.institution %}
+                        <div class="post-meta-item" style="margin-top: 8px; color: #6b7280; font-size: 13px;">
+                            <span style="font-weight: 500;">{{ post.institution.name }}</span>
+                        </div>
+                    {% endif %}
+                </div>
             </div>
         {% empty %}
             <div class="community-post-card">
@@ -44,9 +70,64 @@
     </div>
 
     <div class="community-sidebar">
-        <div class="sidebar-box">
-            <h3>Community stats</h3>
-            <p>Totaal posts: {{ posts|length }}</p>
+        <!-- Top Bijdragers -->
+        <div class="sidebar-box" style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+            <h3 style="margin: 0 0 15px 0; font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                Top bijdragers
+            </h3>
+            <div>
+                {% for user in top_users %}
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #f3f4f6;" {% if not forloop.last %}{% endif %}>
+                        <span style="font-weight: bold; color: #667eea; font-size: 14px;">{{ forloop.counter }}</span>
+                        <div class="post-user-avatar" style="width: 32px; height: 32px; font-size: 14px;">
+                            {{ user.username|slice:":1"|upper }}
+                        </div>
+                        <div style="flex: 1; min-width: 0;">
+                            <a href="{% url 'profiel' %}" style="color: #111827; font-weight: 600; text-decoration: none; font-size: 13px;">{{ user.username }}</a>
+                            <p style="margin: 2px 0 0 0; color: #0d8b79; font-size: 12px; font-weight: 500;">{{ user.points }} punten</p>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p style="color: #6b7280; font-size: 13px; text-align: center;">Nog geen bijdragers</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Community Stats -->
+        <div class="sidebar-box" style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+            <h3 style="margin: 0 0 15px 0; font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                Community stats
+            </h3>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="color: #6b7280; font-size: 13px;">Totaal leden</span>
+                    <span style="font-weight: 600; color: #0d8b79; font-size: 14px;">{{ total_users }}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="color: #6b7280; font-size: 13px;">Actieve discussies</span>
+                    <span style="font-weight: 600; color: #0d8b79; font-size: 14px;">{{ active_discussions }}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="color: #6b7280; font-size: 13px;">Berichten deze maand</span>
+                    <span style="font-weight: 600; color: #0d8b79; font-size: 14px;">{{ posts|length }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Populaire Categorieën -->
+        <div class="sidebar-box" style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px;">
+            <h3 style="margin: 0 0 15px 0; font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                Populaire categorieën
+            </h3>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                {% for category in popular_categories %}
+                    <a href="{% url 'zoeken' %}?category={{ category }}" style="background: #dbeafe; color: #0284c7; padding: 6px 12px; border-radius: 20px; text-decoration: none; font-size: 12px; font-weight: 500; display: inline-block; transition: all 0.2s;">
+                        {{ category }}
+                    </a>
+                {% empty %}
+                    <p style="color: #6b7280; font-size: 13px;">Geen categorieën beschikbaar</p>
+                {% endfor %}
+            </div>
         </div>
     </div>
 </div>

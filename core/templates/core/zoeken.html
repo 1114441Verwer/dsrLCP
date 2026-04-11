@@ -3,6 +3,268 @@
 {% block title %}Zoeken{% endblock %}
 
 {% block content %}
-<h1>Zoeken</h1>
-<p>Deze pagina is nog leeg.</p>
+<div class="search-page">
+    <!-- Search Bar Card -->
+    <div class="search-card">
+        <form class="search-form" method="GET" id="searchForm">
+            <div class="search-input-wrapper">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>
+                <input 
+                    type="text" 
+                    class="search-input" 
+                    placeholder="Zoek naar discussies, personen, tools, artikelen..."
+                    name="q"
+                    value="{{ query }}"
+                    id="searchInput"
+                    oninput="debouncedSearch()"
+                >
+                {% if query %}
+                <a href="{% url 'zoeken' %}" class="search-clear" title="Wis zoekopdracht">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6L6 18"></path>
+                        <path d="M6 6l12 12"></path>
+                    </svg>
+                </a>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+
+    <!-- Main Search Layout -->
+    <div class="search-layout">
+        <!-- Filters Sidebar -->
+        <aside class="search-filters">
+            <form method="GET" class="filters-form" id="filtersForm">
+                <input type="hidden" name="q" value="{{ query }}">
+                
+                <div class="filter-section">
+                    <h3 class="filter-title">Categorie</h3>
+                    <div class="filter-group">
+                        <label class="filter-option">
+                            <input type="radio" name="category" value="all" {% if not category or category == 'all' %}checked{% endif %} onchange="this.form.submit();">
+                            <span>Alles</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="category" value="AI &amp; Technologie" {% if category == 'AI & Technologie' %}checked{% endif %} onchange="this.form.submit();">
+                            <span>AI & Technologie</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="category" value="Richtlijnen" {% if category == 'Richtlijnen' %}checked{% endif %} onchange="this.form.submit();">
+                            <span>Richtlijnen</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="category" value="Digitale Zorg" {% if category == 'Digitale Zorg' %}checked{% endif %} onchange="this.form.submit();">
+                            <span>Digitale Zorg</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="category" value="Onderzoek" {% if category == 'Onderzoek' %}checked{% endif %} onchange="this.form.submit();">
+                            <span>Onderzoek</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="category" value="Opleiding" {% if category == 'Opleiding' %}checked{% endif %} onchange="this.form.submit();">
+                            <span>Opleiding</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="category" value="Innovatie" {% if category == 'Innovatie' %}checked{% endif %} onchange="this.form.submit();">
+                            <span>Innovatie</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="category" value="Patiëntenzorg" {% if category == 'Patiëntenzorg' %}checked{% endif %} onchange="this.form.submit();">
+                            <span>Patiëntenzorg</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="category" value="Persoon" {% if category == 'Persoon' %}checked{% endif %} onchange="this.form.submit();">
+                            <span>Persoon</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="category" value="Instelling" {% if category == 'Instelling' %}checked{% endif %} onchange="this.form.submit();">
+                            <span>Instelling</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="filter-section">
+                    <h3 class="filter-title">Type</h3>
+                    <div class="filter-group">
+                        <label class="filter-option">
+                            <input type="radio" name="type" value="all" {% if not request.GET.type or request.GET.type == 'all' %}checked{% endif %} onchange="document.getElementById('filtersForm').submit();">
+                            <span>Alles</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="type" value="Vraag" {% if request.GET.type == 'Vraag' %}checked{% endif %} onchange="document.getElementById('filtersForm').submit();">
+                            <span>Vraag</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="type" value="Ervaring delen" {% if request.GET.type == 'Ervaring delen' %}checked{% endif %} onchange="document.getElementById('filtersForm').submit();">
+                            <span>Ervaring delen</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="type" value="Innovatie / Tool" {% if request.GET.type == 'Innovatie / Tool' %}checked{% endif %} onchange="document.getElementById('filtersForm').submit();">
+                            <span>Innovatie / Tool</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="type" value="Artikel / Publicatie" {% if request.GET.type == 'Artikel / Publicatie' %}checked{% endif %} onchange="document.getElementById('filtersForm').submit();">
+                            <span>Artikel / Publicatie</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="type" value="Discussie" {% if request.GET.type == 'Discussie' %}checked{% endif %} onchange="document.getElementById('filtersForm').submit();">
+                            <span>Discussie</span>
+                        </label>
+                    </div>
+                </div>
+            </form>
+        </aside>
+
+        <!-- Results Section -->
+        <main class="search-results">
+            {% if results_count > 0 %}
+                <div class="results-header">
+                    <p class="results-count">{{ results_count }} resultaat{{ results_count|pluralize:"en" }} gevonden</p>
+                </div>
+
+                {% if users %}
+                    <!-- Results for Persons -->
+                    {% for user in users %}
+                        <div class="result-card" style="cursor: pointer;">
+                            <div style="display: flex; align-items: flex-start; gap: 15px;">
+                                <div class="post-user-avatar" style="width: 50px; height: 50px; flex-shrink: 0; font-size: 20px;">
+                                    {{ user.username|slice:":1"|upper }}
+                                </div>
+                                <div style="flex: 1;">
+                                    <h3 class="result-title" style="margin: 0 0 4px 0;">{{ user.get_full_name|default:user.username }}</h3>
+                                    <div style="color: #6b7280; font-size: 13px;">
+                                        <a href="{% url 'user_profile' user.username %}" style="color: #111827; font-weight: 600; text-decoration: none;">@{{ user.username }}</a>
+                                        {% if user.function %}<span class="result-description"> • {{ user.function }}</span>{% endif %}
+                                    </div>
+                                    
+                                    {% if user.description %}
+                                        <p class="result-description" style="margin: 8px 0 0 0; color: #4b5563; font-size: 13px; line-height: 1.5;">{{ user.description }}</p>
+                                    {% endif %}
+                                    
+                                    <div style="margin-top: 10px; display: flex; gap: 15px; font-size: 13px; color: #6b7280;">
+                                        <span><strong style="color: #111827;">{{ user.posts.count }}</strong> bijdragen</span>
+                                        <span><strong style="color: #0d8b79;">{{ user.points }}</strong> punten</span>
+                                        <span>Level <strong>{{ user.get_level }}</strong></span>
+                                    </div>
+                                </div>
+                                <a href="{% url 'user_profile' user.username %}" style="background: #0d8b79; color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 500; white-space: nowrap;" onclick="event.stopPropagation();">Profiel</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% elif institutions %}
+                    <!-- Results for Institutions -->
+                    {% for institution in institutions %}
+                        <div class="result-card">
+                            <div style="background: #f3f4f6; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                                <h3 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 600; color: #111827;">{{ institution.name }}</h3>
+                                {% if institution.description %}
+                                    <p style="margin: 0; color: #6b7280; font-size: 13px; line-height: 1.5;">{{ institution.description }}</p>
+                                {% endif %}
+                            </div>
+                            
+                            {% with users=institution.users.all %}
+                                {% if users %}
+                                    <div>
+                                        <a href="#" style="margin: 0; font-size: 14px; font-weight: 600; color: #111827; display: block; margin-bottom: 12px;">{{ users.count }} leden</a>
+                                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                                            {% for user in users %}
+                                                <div style="display: flex; align-items: center; gap: 10px; padding: 10px; background: #f9fafb; border-radius: 6px;">
+                                                    <div class="post-user-avatar" style="width: 36px; height: 36px; font-size: 14px; flex-shrink: 0;">
+                                                        {{ user.username|slice:":1"|upper }}
+                                                    </div>
+                                                    <div style="flex: 1; min-width: 0;">
+                                                        <a href="{% url 'user_profile' user.username %}" style="color: #111827; font-weight: 600; text-decoration: none; font-size: 13px; display: block;">{{ user.get_full_name|default:user.username }}</a>
+                                                        {% if user.function %}<span style="color: #6b7280; font-size: 12px;">{{ user.function }}</span>{% endif %}
+                                                    </div>
+                                                    <div style="text-align: right; font-size: 12px;">
+                                                        <div style="color: #0d8b79; font-weight: 600;">{{ user.points }} pts</div>
+                                                        <div style="color: #6b7280;">Level {{ user.get_level }}</div>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <p style="color: #6b7280; font-size: 13px; text-align: center; padding: 15px;">Geen leden voor deze instelling</p>
+                                {% endif %}
+                            {% endwith %}
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <!-- Results for Posts -->
+                    {% for post in posts %}
+                        <div class="result-card" onclick="openPostDetail({{ post.id }}, '{{ post.title|escapejs }}', '{{ post.user.username|escapejs }}', '{{ post.user.function|escapejs }}', '{{ post.created_at|timesince }} geleden', '{{ post.type|escapejs }}', '{{ post.short_description|escapejs }}', '{{ post.long_description|escapejs }}', '{{ post.category|escapejs }}')" style="cursor: pointer;">
+                            <div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px;">
+                                <div class="post-user-avatar" style="width: 40px; height: 40px; flex-shrink: 0;">
+                                    {{ post.user.username|slice:":1"|upper }}
+                                </div>
+                                <div style="flex: 1; min-width: 0;">
+                                    <h3 class="result-title" style="margin: 0 0 4px 0;">{{ post.title }}</h3>
+                                    <div style="color: #6b7280; font-size: 13px;">
+                                        <span style="font-weight: 600; color: #111827;">{{ post.user.username }}</span>
+                                        {% if post.user.function %}<span> • {{ post.user.function }}</span>{% endif %}
+                                        <span> • {{ post.created_at|timesince }} geleden</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <p class="result-description">{{ post.short_description }}</p>
+                            
+                            <div class="result-tags" style="margin-top: 8px;">
+                                {% if post.category_list %}
+                                    {% for cat in post.category_list %}
+                                        <span class="tag">{{ cat }}</span>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% else %}
+                <div class="no-results">
+                    <p>Geen resultaten gevonden{% if query %} voor "{{ query }}"{% endif %}</p>
+                </div>
+            {% endif %}
+        </main>
+    </div>
+</div>
+
+<script>
+let searchTimer;
+let lastSearchValue = '{{ query|escapejs }}';
+function debouncedSearch() {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(function() {
+        const currentValue = document.getElementById('searchInput').value;
+        if (currentValue !== lastSearchValue) {
+            lastSearchValue = currentValue;
+            // Gebruik fetch om resultaten te laden zonder pagina te herladen
+            const form = document.getElementById('searchForm');
+            const formData = new FormData(form);
+            const params = new URLSearchParams(formData);
+            
+            fetch('{% url "zoeken" %}?' + params.toString())
+                .then(response => response.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const newResults = doc.querySelector('.search-results');
+                    const currentResults = document.querySelector('.search-results');
+                    if (newResults && currentResults) {
+                        currentResults.innerHTML = newResults.innerHTML;
+                    }
+                    // Update wis-knop
+                    const wrapper = document.querySelector('#searchForm .search-input-wrapper');
+                    const existingClear = wrapper.querySelector('.search-clear');
+                    const newClear = doc.querySelector('#searchForm .search-clear');
+                    if (existingClear) existingClear.remove();
+                    if (newClear) wrapper.appendChild(newClear);
+                });
+        }
+    }, 400);
+}
+</script>
 {% endblock %}
