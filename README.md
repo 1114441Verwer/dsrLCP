@@ -72,16 +72,26 @@ pip install django pillow
 
 ---
 
-## 🔄 Na het updaten van het project (git pull)
+## 🔄 Na het mergen / pullen
 
-Als je nieuwe code binnenhaalt, moet je database worden bijgewerkt:
+Na het ophalen van nieuwe code kunnen er aanpassingen zijn gedaan aan de database (bijvoorbeeld nieuwe tabellen of velden).
+
+👉 Daarom moet je je lokale database bijwerken, zodat deze overeenkomt met de nieuwste code.
+Doe je dit niet, dan kan de applicatie fouten geven.
+
+### ✅ Stappen
+
+Haal de nieuwste code binnen:
 
 ```bash
 git pull
-python manage.py migrate
 ```
 
----
+Werk je database bij:
+
+```bash
+python manage.py migrate
+```
 
 ## 🚀 Applicatie starten
 
