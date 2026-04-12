@@ -93,6 +93,8 @@ Werk je database bij:
 python manage.py migrate
 ```
 
+---
+
 ## 🚀 Applicatie starten
 
 Volg deze stappen om de applicatie te draaien:
