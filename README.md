@@ -101,7 +101,7 @@ Volg deze stappen om de applicatie te draaien:
 
 ### 1. Activeer je `.venv`
 
-(Zie hierboven)
+(Wordt bovenaan in ReadMe beschreven.)
 
 ---
 
