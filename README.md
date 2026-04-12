@@ -72,5 +72,9 @@ pip install django pillow
 Na het ophalen van nieuwe wijzigingen moet je je lokale database updaten:
 
 ✅ Stappen
+```
 git pull
+```
+```
 python manage.py migrate
+```
