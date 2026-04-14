@@ -80,8 +80,8 @@
                             <span>Persoon</span>
                         </label>
                         <label class="filter-option">
-                            <input type="radio" name="category" value="Instelling" {% if category == 'Instelling' %}checked{% endif %} onchange="this.form.submit();">
-                            <span>Instelling</span>
+                            <input type="radio" name="category" value="Zorg- en kennisinstellingen" {% if category == 'Zorg- en kennisinstellingen' %}checked{% endif %} onchange="this.form.submit();">
+                            <span>Zorg- en kennisinstellingen</span>
                         </label>
                     </div>
                 </div>
@@ -128,7 +128,7 @@
                 {% if users %}
                     <!-- Results for Persons -->
                     {% for user in users %}
-                        <div class="result-card" style="cursor: pointer;">
+                        <div class="result-card" style="cursor: pointer;" onclick="window.location.href='{% url 'user_profile' user.username %}';">
                             <div style="display: flex; align-items: flex-start; gap: 15px;">
                                 <div class="post-user-avatar" style="width: 50px; height: 50px; flex-shrink: 0; font-size: 20px;">
                                     {{ user.username|slice:":1"|upper }}
@@ -136,7 +136,7 @@
                                 <div style="flex: 1;">
                                     <h3 class="result-title" style="margin: 0 0 4px 0;">{{ user.get_full_name|default:user.username }}</h3>
                                     <div style="color: #6b7280; font-size: 13px;">
-                                        <a href="{% url 'user_profile' user.username %}" style="color: #111827; font-weight: 600; text-decoration: none;">@{{ user.username }}</a>
+                                        <span style="color: #111827; font-weight: 600;">@{{ user.username }}</span>
                                         {% if user.function %}<span class="result-description"> • {{ user.function }}</span>{% endif %}
                                     </div>
                                     
@@ -150,7 +150,7 @@
                                         <span>Level <strong>{{ user.get_level }}</strong></span>
                                     </div>
                                 </div>
-                                <a href="{% url 'user_profile' user.username %}" style="background: #0d8b79; color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 500; white-space: nowrap;" onclick="event.stopPropagation();">Profiel</a>
+                                <span style="background: #0d8b79; color: white; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 500; white-space: nowrap;">Profiel</span>
                             </div>
                         </div>
                     {% endfor %}
@@ -188,7 +188,7 @@
                                         </div>
                                     </div>
                                 {% else %}
-                                    <p style="color: #6b7280; font-size: 13px; text-align: center; padding: 15px;">Geen leden voor deze instelling</p>
+                                    <p style="color: #6b7280; font-size: 13px; text-align: center; padding: 15px;">Geen leden voor deze organisatie</p>
                                 {% endif %}
                             {% endwith %}
                         </div>

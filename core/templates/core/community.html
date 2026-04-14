@@ -8,7 +8,7 @@
         {% if user.is_authenticated %}
             <div class="community-composer">
                 <div class="composer-avatar">{{ user.username|slice:":1"|upper }}</div>
-                <div class="composer-input">Deel je kennis of stel een vraag...</div>
+                <div class="composer-input" onclick="openPostModal()" style="cursor: pointer;">Deel je kennis of stel een vraag...</div>
                 <button class="composer-post-btn" onclick="openPostModal()">Post</button>
             </div>
         {% else %}
@@ -83,7 +83,7 @@
                             {{ user.username|slice:":1"|upper }}
                         </div>
                         <div style="flex: 1; min-width: 0;">
-                            <a href="{% url 'profiel' %}" style="color: #111827; font-weight: 600; text-decoration: none; font-size: 13px;">{{ user.username }}</a>
+                            <a href="{% url 'user_profile' user.username %}" style="color: #111827; font-weight: 600; text-decoration: none; font-size: 13px;">{{ user.username }}</a>
                             <p style="margin: 2px 0 0 0; color: #0d8b79; font-size: 12px; font-weight: 500;">{{ user.points }} punten</p>
                         </div>
                     </div>

@@ -167,8 +167,8 @@ def zoeken_view(request):
     users = []
     institutions = []
 
-    # Als categorie Instelling is: alleen instellingen zoeken
-    if category == 'Instelling':
+    # Als categorie Zorg- en kennisinstellingen is: alleen instellingen zoeken
+    if category == 'Zorg- en kennisinstellingen':
         institutions = Institution.objects.all()
         if query:
             institutions = institutions.filter(
